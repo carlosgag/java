@@ -1,0 +1,3 @@
+After a lot of research and looking in internet, I couldn't use count parameter to limit the amount of tweets received.
+It seems that is related with my user's role. I requested a different role to Twitter API's team, but they never answered. 
+I hope the estimation for the tweet size would be useful, to limit the response as requested.
