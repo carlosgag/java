@@ -1,4 +1,4 @@
-package common.controller;
+package com.common.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
