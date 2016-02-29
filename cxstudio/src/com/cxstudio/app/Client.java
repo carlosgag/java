@@ -11,13 +11,16 @@ public class Client {
 		
 	}
 	
-	public void calculateShapeArea(Shape<ShapeVisitor> s){
+	public void calculateShapeArea(Shape<ShapeVisitor> c){
+
 		ShapeVisitor shapeVisitor = new AreaVisitor();
-		s.calculate(shapeVisitor);
+		c.calculate(shapeVisitor);
 	}
 
 	public static void main(String[] args) {
+
 		Shape<ShapeVisitor> c = new Circle(0.5);
+		
 		Client client = new Client();
 		client.calculateShapeArea(c);
 	}
