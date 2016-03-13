@@ -5,7 +5,10 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +16,8 @@ import org.junit.Test;
 import com.crossmarx.rest.api.RESTClient;
 import com.crossmarx.rest.api.entities.Login;
 import com.crossmarx.rest.api.entities.LoginResponse;
+import com.crossmarx.rest.api.entities.Query;
+import com.crossmarx.rest.api.entities.Spec;
 import com.crossmarx.rest.api.entities.StatusMessage;
 import com.crossmarx.rest.api.exceptions.DeserializingException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
@@ -33,13 +38,6 @@ public class TestCase {
 	public void setUp() throws Exception {
 		restClient = new RESTClient();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	}
-
-	private LoginResponse getLoginResponse() throws SerializingException{
-		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
-		return response.getEntity(LoginResponse.class);
 	}
 	
 	@Test
@@ -214,13 +212,35 @@ public class TestCase {
 		}
 	}
 	
+	private Query makeTestStockQuery(){
+		Query queryRequest = new Query();
+		queryRequest.setClassName("");
+		
+		List<Spec> sortSpecs = new ArrayList<>();
+		Spec spec = new Spec();
+		spec.setField("name");
+		spec.setDirection("desc");
+		sortSpecs.add(spec);
+		Spec spec2 = new Spec();
+		spec2.setField("name");
+		spec2.setDirection("desc");
+		sortSpecs.add(spec2);
+		queryRequest.setSortSpecs(sortSpecs);
+		
+		return queryRequest;
+	}
+	
 	@Test
 	public void testGetStockItemsQueryOK() throws SerializingException{
 		// Operation:/query/<version>/record/<class>/<id>?authhash=<hash>
+		// /engine/api/VERSION/query?querydef={}
 		LoginResponse output = getLoginResponse();
-		String operation = "record/account/2?authhash=" + output.getAuthHash();
+		Query query = makeTestStockQuery();
+		//String query ="{}";
+		String operation = "query?querydef="+query+"&authhash=" + output.getAuthHash();
 		ClientResponse response = restClient.doGet(operation);
 		String result = response.getEntity(String.class);
+		System.out.println(result);
 		try {
 			JsonNode rootNode = mapper.readTree(result);
 			String status = rootNode.path("statusMessage").path("message").asText();
@@ -228,6 +248,13 @@ public class TestCase {
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
+	}
+
+	private LoginResponse getLoginResponse() throws SerializingException{
+		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
+		String operation = "login";
+		ClientResponse response = restClient.doPost(bodyRequest, operation);
+		return response.getEntity(LoginResponse.class);
 	}
 	
 	private String getLoginRequest(String loginname, String password) throws SerializingException {
