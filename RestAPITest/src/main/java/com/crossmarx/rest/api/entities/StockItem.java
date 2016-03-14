@@ -1,7 +1,5 @@
 package com.crossmarx.rest.api.entities;
 
-import java.util.Date;
-
 public class StockItem {
 	
 	private Integer Id;

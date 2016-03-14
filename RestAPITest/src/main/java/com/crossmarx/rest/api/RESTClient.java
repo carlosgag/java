@@ -130,19 +130,7 @@ public class RESTClient {
 	
 	public ClientResponse doGet(String operation){
 		WebResource webResource = client.resource(Config.URL + "/" + operation);
-		System.out.println(Config.URL + "/" + operation);
-//		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED)
-//				.get(ClientResponse.class);
-		ClientResponse response = webResource
-				.accept(
-						MediaType.APPLICATION_FORM_URLENCODED,
-						MediaType.APPLICATION_OCTET_STREAM,
-						MediaType.APPLICATION_FORM_URLENCODED,
-						MediaType.MEDIA_TYPE_WILDCARD,
-						MediaType.MULTIPART_FORM_DATA,
-						MediaType.WILDCARD,
-						MediaType.APPLICATION_JSON
-						)
+		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED)
 				.get(ClientResponse.class);
 		return response;
 	}
