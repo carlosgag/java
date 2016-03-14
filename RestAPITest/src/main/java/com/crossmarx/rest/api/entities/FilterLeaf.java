@@ -1,6 +1,6 @@
 package com.crossmarx.rest.api.entities;
 
-public class FilterLeaf extends Elem {
+public class FilterLeaf implements Filter {
 	
 	private String field;
 	private String operator;

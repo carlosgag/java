@@ -5,8 +5,8 @@ import java.util.List;
 public class Query {
 	
 	private String className;
-	private List<Filter> resultFields;
-	private String filter;
+	private List<String> resultFields;
+	private Filter filter;
 	private List<Spec> sortSpecs;
 
 	public String getClassName() {
@@ -17,19 +17,19 @@ public class Query {
 		this.className = className;
 	}
 
-	public List<Filter> getResultFields() {
+	public List<String> getResultFields() {
 		return resultFields;
 	}
 
-	public void setResultFields(List<Filter> resultFields) {
+	public void setResultFields(List<String> resultFields) {
 		this.resultFields = resultFields;
 	}
 
-	public String getFilter() {
+	public Filter getFilter() {
 		return filter;
 	}
 
-	public void setFilter(String filter) {
+	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
 

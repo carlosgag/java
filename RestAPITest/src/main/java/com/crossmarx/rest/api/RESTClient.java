@@ -15,6 +15,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
+import javax.ws.rs.core.MediaType;
 
 import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.sun.jersey.api.client.Client;
@@ -119,11 +120,30 @@ public class RESTClient {
 				post(ClientResponse.class, requestBody);
 		return response;
 	}
+
+	public ClientResponse doPut(String requestBody, String operation){
+		WebResource webResource = client.resource(Config.URL + "/" + operation);
+		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED).
+				put(ClientResponse.class, requestBody);
+		return response;
+	}
 	
 	public ClientResponse doGet(String operation){
 		WebResource webResource = client.resource(Config.URL + "/" + operation);
-		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED).
-				get(ClientResponse.class);
+		System.out.println(Config.URL + "/" + operation);
+//		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED)
+//				.get(ClientResponse.class);
+		ClientResponse response = webResource
+				.accept(
+						MediaType.APPLICATION_FORM_URLENCODED,
+						MediaType.APPLICATION_OCTET_STREAM,
+						MediaType.APPLICATION_FORM_URLENCODED,
+						MediaType.MEDIA_TYPE_WILDCARD,
+						MediaType.MULTIPART_FORM_DATA,
+						MediaType.WILDCARD,
+						MediaType.APPLICATION_JSON
+						)
+				.get(ClientResponse.class);
 		return response;
 	}
 }

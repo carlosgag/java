@@ -3,26 +3,34 @@ package com.crossmarx.rest.api;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.crossmarx.rest.api.RESTClient;
+import com.crossmarx.rest.api.entities.Filter;
+import com.crossmarx.rest.api.entities.FilterLeaf;
+import com.crossmarx.rest.api.entities.FilterNode;
 import com.crossmarx.rest.api.entities.Login;
 import com.crossmarx.rest.api.entities.LoginResponse;
 import com.crossmarx.rest.api.entities.Query;
 import com.crossmarx.rest.api.entities.Spec;
 import com.crossmarx.rest.api.entities.StatusMessage;
+import com.crossmarx.rest.api.entities.StockItem;
 import com.crossmarx.rest.api.exceptions.DeserializingException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,135 +39,120 @@ import com.sun.jersey.api.client.ClientResponse;
 public class TestCase {
 
 	private ObjectMapper mapper = new ObjectMapper();
-
+	private StockItem stockItem;
+	private LoginResponse loginResponse;
 	private RESTClient restClient;
 
+	private StockItem createStockItemForTest(){
+		StockItem stockItem = new StockItem();
+		stockItem.setName("stock item test 1");
+		stockItem.setDate_in_stock("2016-03-07T23:00:00Z");
+		stockItem.setAccount(1);
+		stockItem.setCosts(1.0);
+		stockItem.setNumber_in_stock(2);
+		stockItem.setWeight(3.0);
+		return stockItem;
+	}
+	
+	private LoginResponse getLoginResponse() throws SerializingException{
+		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
+		String operation = "login";
+		ClientResponse response = restClient.doPost(bodyRequest, operation);
+		return response.getEntity(LoginResponse.class);
+	}
+	
 	@Before
 	public void setUp() throws Exception {
 		restClient = new RESTClient();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		loginResponse = getLoginResponse();
+		stockItem = createStockItemForTest();
 	}
 	
 	@Test
 	public void testLoginOutput() throws SerializingException {
 		try {
-			LoginResponse output = getLoginResponse();
 			System.out.println("Output from Server .... \n");
-			System.out.println(output);
+			System.out.println(loginResponse);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
 
 	@Test
-	public void testInputLoginOK() throws SerializingException {
-		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
+	public void testLoginInputOK() throws SerializingException {
 		try {
-			LoginResponse output = response.getEntity(LoginResponse.class);
-			Assert.assertTrue(output.getStatusMessage().getErrcode().equals("0") &&
-					output.getStatusMessage().getErrcode().equals("Found"));
-			System.out.println("Output from Server .... \n");
-			System.out.println(output);
+			StatusMessage statusMessage = loginResponse.getStatusMessage();
+			Assert.assertTrue(statusMessage.getErrcode().equals("0") &&
+					statusMessage.getMessage().equals("Found"));
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
 
 	@Test
-	public void testInputLoginError() throws SerializingException {
+	public void testLoginInputError() throws SerializingException {
 		String bodyRequest = getLoginRequest("carloss", "oceanHouse1");
 		String operation = "login";
 		ClientResponse response = restClient.doPost(bodyRequest, operation);
 		try {
-			LoginResponse output = response.getEntity(LoginResponse.class);
-			Assert.assertTrue(output.getStatusMessage().getErrcode().equals("20"));
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testStatusMsgOK() throws SerializingException {
-		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
-		try {
-			LoginResponse output = response.getEntity(LoginResponse.class);
-			Assert.assertTrue(output.getStatusMessage().getMessage().equals("Found"));
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testStatusMsgError() throws SerializingException {
-		String bodyRequest = getLoginRequest("carloss", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
-		try {
-			LoginResponse output = response.getEntity(LoginResponse.class);
-			Assert.assertTrue(output.getStatusMessage().getMessage().equals("logon not succeeded"));
+			LoginResponse loginResponse = response.getEntity(LoginResponse.class);
+			StatusMessage statusMessage = loginResponse.getStatusMessage();
+			Assert.assertTrue(statusMessage.getErrcode().equals("20") &&
+					statusMessage.getMessage().equals("logon not succeeded"));
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
 
 	@Test
-	public void testTimeStamp() throws SerializingException{
-		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
+	public void testTimeStamp() {
 		try {
-			LoginResponse output = response.getEntity(LoginResponse.class);
-			Date timestamp = deserializeDate(output.getTimestamp());
-			System.out.println(timestamp);
-		} catch (DeserializingException e) {
-			fail(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testAuthHashOK() throws SerializingException{
-		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
-		try {
-			LoginResponse output = response.getEntity(LoginResponse.class);
-			Assert.assertTrue(!output.getAuthHash().equals("null"));
+			DateTime dateTime = deserializeDate(loginResponse.getTimestamp());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testAuthHashError() throws SerializingException{
+	public void testLoginAuthHashOK() throws SerializingException{
+		try {
+			Assert.assertTrue(loginResponse.getAuthHash() != null);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testLoginAuthHashError() throws SerializingException{
 		String bodyRequest = getLoginRequest("carloss", "oceanHouse1");
 		String operation = "login";
 		ClientResponse response = restClient.doPost(bodyRequest, operation);
 		try {
 			LoginResponse output = response.getEntity(LoginResponse.class);
-			Assert.assertTrue(output.getAuthHash().equals("null"));
+			Assert.assertTrue(output.getAuthHash() == null);
 		} catch (Exception e) {
-			fail(e.getMessage());
+			fail(e.getMessage()); 
 		}
 	}
 	
+	/**
+	 * Use the authorization code to retrieve a record
+	 * @throws SerializingException
+	 */
 	@Test
-	public void testAuthHashValid() throws SerializingException {
+	public void testLoginAuthHashValid() throws SerializingException {
 		// Operation:/record/<class>/<id>?authhash=<hash>
-		LoginResponse output = getLoginResponse();
-		String operation = "record/account/1?authhash=" + output.getAuthHash();
+		String operation = "record/account/1?authhash=" + loginResponse.getAuthHash();
 		ClientResponse response = restClient.doGet(operation);
 		String result = response.getEntity(String.class);
-		System.out.println(result);
 		try {
 			JsonNode rootNode = mapper.readTree(result);
 			JsonNode recordNode = rootNode.path("record");
+			String className = recordNode.path("class").textValue();
 			JsonNode dataNode = recordNode.findValue("data");
 			Integer id = dataNode.get("Id").asInt();
-			Assert.assertTrue(id == 1);
+			Assert.assertTrue(id == 1 && className.equals("account"));
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
@@ -168,8 +161,7 @@ public class TestCase {
 	@Test
 	public void testGetAccountOK() throws SerializingException {
 		// Operation:/record/<class>/<id>?authhash=<hash>
-		LoginResponse output = getLoginResponse();
-		String operation = "record/account/1?authhash=" + output.getAuthHash();
+		String operation = "record/account/1?authhash=" + loginResponse.getAuthHash();
 		ClientResponse response = restClient.doGet(operation);
 		String result = response.getEntity(String.class);
 		try {
@@ -180,9 +172,6 @@ public class TestCase {
 			Assert.assertTrue(id == 1);
 			String loginName = dataNode.get("LoginName").asText();
 			Assert.assertTrue(loginName.equals("carlos"));
-//			String password = dataNode.get("Password").asText();
-//			System.out.println(password);
-//			Assert.assertTrue(password.equals("nl.crossmarx.common.util.CXPassword@5aae2bd0"));
 			Integer usergroup = dataNode.get("Usergroup").asInt();
 			Assert.assertTrue(usergroup == 3);
 			String firstname = dataNode.get("Firstname").asText();
@@ -199,20 +188,182 @@ public class TestCase {
 	@Test
 	public void testGetAccountError() throws SerializingException {
 		// Operation:/record/<class>/<id>?authhash=<hash>
-		LoginResponse output = getLoginResponse();
-		String operation = "record/account/2?authhash=" + output.getAuthHash();
+		String operation = "record/account/2?authhash=" + loginResponse.getAuthHash();
 		ClientResponse response = restClient.doGet(operation);
 		String result = response.getEntity(String.class);
 		try {
 			JsonNode rootNode = mapper.readTree(result);
-			String status = rootNode.path("statusMessage").path("message").asText();
-			Assert.assertTrue(status.equals("Record not found"));
+			String status = rootNode.path("statusMessage").toString();
+			StatusMessage statusMessage = mapper.readValue(status, StatusMessage.class);
+			Assert.assertTrue(statusMessage.getMessage().equals("Record not found"));
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
 	}
 	
-	private Query makeTestStockQuery(){
+	@Test
+	public void testGetStockItem() throws SerializingException {
+		// Operation:/record/<class>/<id>?authhash=<hash>
+		String operation = "record/stockitem/1?authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doGet(operation);
+		String result = response.getEntity(String.class);
+		System.out.println(result);
+		try {
+			JsonNode rootNode = mapper.readTree(result);
+			String status = rootNode.path("statusMessage").toString();
+			StatusMessage statusMessage = mapper.readValue(status, StatusMessage.class);
+			Assert.assertTrue(statusMessage.getMessage().equals("Record found"));
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetStockItemsQueryOK() 
+			throws SerializingException, JsonProcessingException, UnsupportedEncodingException{
+		// /engine/api/VERSION/query?querydef={}&authhash=<hash>
+		Query query = makeTestStockItemQueryOK();
+		String value = mapper.writeValueAsString(query);
+		value = value.replace("className", "class");
+		value = URLEncoder.encode(value, "UTF-8");
+		String operation = "query?querydef=" + value + "&authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doGet(operation);
+		String result = response.getEntity(String.class);
+		try {
+			JsonNode rootNode = mapper.readTree(result);
+			JsonNode record = rootNode.path("record");
+			String stockItem = record.path("data").toString();
+			String source = "{\"Id\":1,\"Name\":\"stock item 1\",\"Date_in_stock\":\"2016-03-07T23:00:00Z\",\"Account\":1,\"Image\":\"109/2016/10/not-giant-enough-letter-a_2.jpg\",\"Costs\":4500,\"Number_in_stock\":345345,\"Weight\":4545.0}";
+			Assert.assertTrue(stockItem.equals(source));
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetStockItemsQueryError() 
+			throws SerializingException, IOException{
+		// /engine/api/VERSION/query?querydef={}&authhash=<hash>
+		Query query = makeTestStockItemQueryError();
+		String value = mapper.writeValueAsString(query);
+		value = value.replace("className", "class");
+		value = URLEncoder.encode(value,"UTF-8");
+		String operation = "query?querydef="+value+"&authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doGet(operation);
+		String result = response.getEntity(String.class);
+		JsonNode rootNode = mapper.readTree(result);
+		String error = rootNode.path("message").textValue();
+		Assert.assertTrue(error.equals("<<"));
+	}
+
+	@Test
+	public void testStockItemImageDownload() throws SerializingException {
+		// URI: /engine/api/carlos/download/stockitem/1/Image
+		// This will return
+		// "Image":"109/2016/10/not-giant-enough-letter-a_2.jpg"
+		String operation = "download/stockitem/1/Image?authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doGet(operation);
+		String result = response.getEntity(String.class);
+		System.out.println(result);
+		//{"errcode":10,"message":"Illegal request"}
+		fail("Illegal request message showed");
+	}	
+	
+	@Test
+	public void testStockItemCreationOK() throws SerializingException, JsonProcessingException{
+		// URI: /engine/api/carlos/record/stockitem
+		String body = mapper.writeValueAsString(stockItem);
+		String operation = "record/stockitem?authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doPost(body, operation);
+		String result = response.getEntity(String.class);
+		System.out.println(result);
+		//{"statusMessage":{"errcode":0,"message":"Data saved"},"timestamp":"2016-03-13T21:54:19Z"}
+		//PUT???
+//		operation = "?authhash=" + output.getAuthHash();
+//		response = restClient.doPut(operation);
+//		result = response.getEntity(String.class);
+//		System.out.println(result);
+	}
+
+	@Test
+	public void testStockItemUpdateOK() throws SerializingException, JsonProcessingException {
+		// URI: /engine/api/<carlos>/record/<stockitem>/<id>
+		stockItem.setName("update stock item");
+		String body = mapper.writeValueAsString(stockItem);
+		String operation = "record/stockitem/" + stockItem.getId() + "?authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doPost(body, operation);
+		String result = response.getEntity(String.class);
+		System.out.println(result);
+		//{"statusMessage":{"errcode":0,"message":"Data saved"},"timestamp":"2016-03-13T22:04:08Z","key":"1"}
+	}
+	
+	@Test
+	public void testStockItemUpdateError() throws SerializingException, JsonProcessingException{
+		stockItem.setId(3);
+		String body = mapper.writeValueAsString(stockItem);
+		String operation= "record/stockitem/1?authhash=" + loginResponse.getAuthHash();
+		ClientResponse response = restClient.doPost(body, operation);
+		String result = response.getEntity(String.class);
+		System.out.println(result);
+		//
+	}
+	
+	@Test
+	public void testStockItemCRUD() 
+			throws JsonProcessingException, SerializingException, UnsupportedEncodingException{
+		//TODO parameterize stock item object for this cycle
+		//create stock item
+		testStockItemCreationOK();
+		//read stock item
+		testGetStockItem();
+		//read stock item from query
+		testGetStockItemsQueryOK();
+		//update stock item
+		testStockItemUpdateOK();
+		//delete stock item
+	}
+	
+	private Query makeTestStockItemQueryOK(){
+		Query queryRequest = new Query();
+		
+		List<Spec> sortSpecs = new ArrayList<>();
+		Spec spec = new Spec();
+		spec.setField("name");
+		spec.setDirection("desc");
+		sortSpecs.add(spec);
+		Spec spec2 = new Spec();
+		spec2.setField("id");
+		spec2.setDirection("asc");
+		sortSpecs.add(spec2);
+		queryRequest.setSortSpecs(sortSpecs);
+		
+		queryRequest.setClassName("stockitem");
+		
+		FilterNode filter = new FilterNode();
+		filter.setOperator("and");
+		List<Filter> children = new ArrayList<>();
+		FilterLeaf leaf1 = new FilterLeaf();
+		leaf1.setField("Id");
+		leaf1.setOperator("<");
+		leaf1.setValue(2);
+		children.add(leaf1);
+		FilterLeaf leaf2 = new FilterLeaf();
+		leaf2.setField("Name");
+		leaf2.setOperator("equals");
+		leaf2.setValue("stock item 1");
+		children.add(leaf2);
+		filter.setChildren(children);		
+		queryRequest.setFilter(filter);
+		
+		List<String> resultFields = new ArrayList<>();
+		resultFields.add("Id");
+		resultFields.add("Name");
+		queryRequest.setResultFields(resultFields);
+		
+		return queryRequest;
+	}
+	
+	private Query makeTestStockItemQueryError(){
 		Query queryRequest = new Query();
 		queryRequest.setClassName("");
 		
@@ -222,39 +373,35 @@ public class TestCase {
 		spec.setDirection("desc");
 		sortSpecs.add(spec);
 		Spec spec2 = new Spec();
-		spec2.setField("name");
-		spec2.setDirection("desc");
+		spec2.setField("id");
+		spec2.setDirection("asc");
 		sortSpecs.add(spec2);
 		queryRequest.setSortSpecs(sortSpecs);
 		
+		queryRequest.setClassName("stockitem");
+		
+		FilterNode filter = new FilterNode();
+		filter.setOperator("and");
+		List<Filter> children = new ArrayList<>();
+		FilterLeaf leaf1 = new FilterLeaf();
+		leaf1.setField("Id");
+		leaf1.setOperator("<<");
+		leaf1.setValue(2);
+		children.add(leaf1);
+		FilterLeaf leaf2 = new FilterLeaf();
+		leaf2.setField("Name");
+		leaf2.setOperator("equals");
+		leaf2.setValue("stock item 1");
+		children.add(leaf2);
+		filter.setChildren(children);		
+		queryRequest.setFilter(filter);
+		
+		List<String> resultFields = new ArrayList<>();
+		resultFields.add("Id");
+		resultFields.add("Name");
+		queryRequest.setResultFields(resultFields);
+		
 		return queryRequest;
-	}
-	
-	@Test
-	public void testGetStockItemsQueryOK() throws SerializingException{
-		// Operation:/query/<version>/record/<class>/<id>?authhash=<hash>
-		// /engine/api/VERSION/query?querydef={}
-		LoginResponse output = getLoginResponse();
-		Query query = makeTestStockQuery();
-		//String query ="{}";
-		String operation = "query?querydef="+query+"&authhash=" + output.getAuthHash();
-		ClientResponse response = restClient.doGet(operation);
-		String result = response.getEntity(String.class);
-		System.out.println(result);
-		try {
-			JsonNode rootNode = mapper.readTree(result);
-			String status = rootNode.path("statusMessage").path("message").asText();
-			Assert.assertTrue(status.equals("Record not found"));
-		} catch (IOException e) {
-			fail(e.getMessage());
-		}
-	}
-
-	private LoginResponse getLoginResponse() throws SerializingException{
-		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		String operation = "login";
-		ClientResponse response = restClient.doPost(bodyRequest, operation);
-		return response.getEntity(LoginResponse.class);
 	}
 	
 	private String getLoginRequest(String loginname, String password) throws SerializingException {
@@ -266,14 +413,11 @@ public class TestCase {
 		}
 	}
 	
-	private Date deserializeDate(String date) throws DeserializingException{
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssSSSZ");
-        try {
-        	//yyyy-MM-dd'T'HH:mm:ssZ??
-            return format.parse(date);
-        } catch (ParseException e) {
-            throw new DeserializingException(e.getMessage(), e.getCause());
-        }
+	private DateTime deserializeDate(String date) throws DeserializingException{
+		System.out.println(date);
+		DateTimeFormatter parser = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+        //yyyy-MM-dd'T'HH:mm:ssZ??
+		return DateTime.parse("date");
 	}
 
 }

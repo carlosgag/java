@@ -2,10 +2,10 @@ package com.crossmarx.rest.api.entities;
 
 import java.util.List;
 
-public class FilterNode extends Elem {
+public class FilterNode implements Filter {
 	
 	private String operator;
-	private List<Elem> children;
+	private List<Filter> children;
 
 	public String getOperator() {
 		return operator;
@@ -15,11 +15,11 @@ public class FilterNode extends Elem {
 		this.operator = operator;
 	}
 
-	public List<Elem> getChildren() {
+	public List<Filter> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<Elem> children) {
+	public void setChildren(List<Filter> children) {
 		this.children = children;
 	}
 }
