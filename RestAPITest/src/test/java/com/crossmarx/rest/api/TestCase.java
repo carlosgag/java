@@ -5,8 +5,13 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -105,6 +110,7 @@ public class TestCase {
 	@Test
 	public void testTimeStamp() {
 		try {
+			System.out.println(loginResponse.getTimestamp());
 			DateTime dateTime = deserializeDate(loginResponse.getTimestamp());
 		} catch (Exception e) {
 			//fail(e.getMessage());
@@ -271,11 +277,7 @@ public class TestCase {
 		ClientResponse response = restClient.doPost(body, operation);
 		String result = response.getEntity(String.class);
 		//{"statusMessage":{"errcode":0,"message":"Data saved"},"timestamp":"2016-03-13T21:54:19Z"}
-		//PUT???
-//		operation = "?authhash=" + output.getAuthHash();
-//		response = restClient.doPut(operation);
-//		result = response.getEntity(String.class);
-//		System.out.println(result);
+		System.out.println(result);
 	}
 
 	@Test
@@ -404,9 +406,33 @@ public class TestCase {
 		}
 	}
 	
-	private DateTime deserializeDate(String date) throws DeserializingException{
-		DateTimeFormatter parser = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-        //yyyy-MM-dd'T'HH:mm:ssZ??
+	private DateTime deserializeDate(String dateString) throws DeserializingException {
+		final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+		final String UTC_DATE_REGEX = "^\\d{4}-[0-1][0-3]-[0-3]\\d{1}T[0-2]\\d{1}:[0-5]\\d{1}:[0-5]\\d{1}Z$";
+		final String UTC_DATE_REGEX_SHORT = "??";
+		if (dateString.matches(UTC_DATE_REGEX) || dateString.matches(UTC_DATE_REGEX_SHORT)) {
+			if (dateString.matches(UTC_DATE_REGEX)) {
+				System.out.println("matches regex");
+			}
+			if (dateString.matches(UTC_DATE_REGEX_SHORT)) {
+				System.out.println("matches regex short");
+			}
+			dateString = dateString.replace("T", " ");
+			dateString = dateString.replace("Z", "");
+			System.out.println(dateString);
+			try {
+				SimpleDateFormat formatUTC = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
+				formatUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+				Date localTime = formatUTC.parse(dateString);
+				System.out.println(">>" + formatUTC.format(localTime));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		// yyyy-MM-dd'T'HH:mm:ssZ??
 		return DateTime.parse("date");
 	}
 
