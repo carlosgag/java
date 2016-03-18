@@ -74,4 +74,16 @@ public class StockItem {
 	public void setWeight(Double weight) {
 		Weight = weight;
 	}
+
+	@Override
+	public String toString(){
+		return 	"Id: " + Id +"\n" +
+				"Name: " + Name +"\n" +
+				"Date_in_stock: " + Date_in_stock +"\n" +
+				"Account: " + Account +"\n" +
+				"Image:" + Image + "\n" + 
+				"Costs:" + Costs + "\n" + 
+				"Number_in_stock:" + Number_in_stock + "\n" + 
+				"Weight:" + Weight + "\n";
+	}
 }

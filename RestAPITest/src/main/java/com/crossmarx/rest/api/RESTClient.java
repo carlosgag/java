@@ -15,8 +15,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
-import javax.ws.rs.core.MediaType;
-
 import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;

@@ -11,4 +11,8 @@ public class DeserializingException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
+	public DeserializingException(String string) {
+		// TODO Auto-generated constructor stub
+	}
+
 }
