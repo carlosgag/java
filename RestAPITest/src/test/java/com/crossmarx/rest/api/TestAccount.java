@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,6 @@ import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class TestAccount {
 
@@ -31,8 +32,8 @@ public class TestAccount {
 		// Operation:/record/<class>/<id>?authhash=<hash>
 		String operation = "record/account/1?authhash=" + loginResponse.getAuthHash();
 		try {
-			ClientResponse response = Utils.getClient().doGet(operation);
-			String result = response.getEntity(String.class);
+			Response response = Utils.getClient().doGet(operation);
+			String result = response.readEntity(String.class);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			JsonNode recordNode = rootNode.path("record");
 			JsonNode dataNode = recordNode.findValue("data");
@@ -58,8 +59,8 @@ public class TestAccount {
 		// Operation:/record/<class>/<id>?authhash=<hash>
 		String operation = "record/account/2?authhash=" + loginResponse.getAuthHash();
 		try {
-			ClientResponse response = Utils.getClient().doGet(operation);
-			String result = response.getEntity(String.class);
+			Response response = Utils.getClient().doGet(operation);
+			String result = response.readEntity(String.class);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			String status = rootNode.path("statusMessage").toString();
 			StatusMessage statusMessage = Utils.getMapper().readValue(status, StatusMessage.class);
@@ -73,8 +74,8 @@ public class TestAccount {
 			throws SerializingException, SecurityConfigurationException, JsonProcessingException {
 		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
 		String operation = "login";
-		ClientResponse response = Utils.getClient().doPost(bodyRequest, operation);
-		return response.getEntity(LoginResponse.class);
+		Response response = Utils.getClient().doPost(bodyRequest, operation);
+		return response.readEntity(LoginResponse.class);
 	}
 
 	private String getLoginRequest(String loginname, String password)

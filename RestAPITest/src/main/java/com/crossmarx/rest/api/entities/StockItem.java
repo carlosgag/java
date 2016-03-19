@@ -1,5 +1,7 @@
 package com.crossmarx.rest.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class StockItem {
 	
 	private Integer Id;
@@ -7,10 +9,11 @@ public class StockItem {
 	private String Date_in_stock;
 	private Integer Account;
 	private String Image;
-	private Double Costs;
+	private Integer Costs;
 	private Integer Number_in_stock;
 	private Double Weight;
 
+	@JsonProperty("Id")
 	public Integer getId() {
 		return Id;
 	}
@@ -19,6 +22,7 @@ public class StockItem {
 		Id = id;
 	}
 
+	@JsonProperty("Name")
 	public String getName() {
 		return Name;
 	}
@@ -27,6 +31,7 @@ public class StockItem {
 		Name = name;
 	}
 
+	@JsonProperty("Date_in_stock")
 	public String getDate_in_stock() {
 		return Date_in_stock;
 	}
@@ -35,6 +40,7 @@ public class StockItem {
 		Date_in_stock = date_in_stock;
 	}
 
+	@JsonProperty("Account")
 	public Integer getAccount() {
 		return Account;
 	}
@@ -43,6 +49,7 @@ public class StockItem {
 		Account = account;
 	}
 
+	@JsonProperty("Image")
 	public String getImage() {
 		return Image;
 	}
@@ -51,14 +58,16 @@ public class StockItem {
 		Image = image;
 	}
 
-	public Double getCosts() {
+	@JsonProperty("Costs")
+	public Integer getCosts() {
 		return Costs;
 	}
 
-	public void setCosts(Double costs) {
+	public void setCosts(Integer costs) {
 		Costs = costs;
 	}
 
+	@JsonProperty("Number_in_stock")
 	public Integer getNumber_in_stock() {
 		return Number_in_stock;
 	}
@@ -67,6 +76,7 @@ public class StockItem {
 		Number_in_stock = number_in_stock;
 	}
 
+	@JsonProperty("Weight")
 	public Double getWeight() {
 		return Weight;
 	}

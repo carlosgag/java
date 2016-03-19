@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +23,6 @@ import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class TestLogin {
 	
@@ -41,7 +42,7 @@ public class TestLogin {
 
 	@Test
 	public void testLoginOutput() {
-			System.out.println("Output from Server .... \n");
+			System.out.println("Output from Server...");
 			System.out.println(loginResponse);
 			Assert.assertTrue(true);
 	}
@@ -50,7 +51,8 @@ public class TestLogin {
 	public void testLoginInputOK() {
 		StatusMessage statusMessage = loginResponse.getStatusMessage();
 		Assert.assertTrue(statusMessage.getErrcode().equals("0") && 
-				statusMessage.getMessage().equals("Found"));
+				statusMessage.getMessage().equals("Found") &&
+				(loginResponse.getAuthHash() != null));
 
 	}
 
@@ -59,8 +61,8 @@ public class TestLogin {
 		String operation = "login";
 		try {
 			String bodyRequest = getLoginRequest("carloss", "oceanHouse1");
-			ClientResponse response = Utils.getClient().doPost(bodyRequest, operation);
-			LoginResponse loginResponse = response.getEntity(LoginResponse.class);
+			Response response = Utils.getClient().doPost(bodyRequest, operation);
+			LoginResponse loginResponse = response.readEntity(LoginResponse.class);
 			StatusMessage statusMessage = loginResponse.getStatusMessage();
 			Assert.assertTrue(statusMessage.getErrcode().equals("20")
 					&& statusMessage.getMessage().equals("logon not succeeded"));
@@ -70,17 +72,12 @@ public class TestLogin {
 	}
 
 	@Test
-	public void testLoginAuthHashOK() {
-		Assert.assertTrue(loginResponse.getAuthHash() != null);
-	}
-
-	@Test
 	public void testLoginAuthHashError() {
 		String operation = "login";
 		try {
 			String bodyRequest = getLoginRequest("carloss", "oceanHouse1");
-			ClientResponse response = Utils.getClient().doPost(bodyRequest, operation);
-			LoginResponse output = response.getEntity(LoginResponse.class);
+			Response response = Utils.getClient().doPost(bodyRequest, operation);
+			LoginResponse output = response.readEntity(LoginResponse.class);
 			Assert.assertTrue(output.getAuthHash() == null);
 		} catch (SerializingException | SecurityConfigurationException | JsonProcessingException e) {
 			fail(e.getMessage());
@@ -97,8 +94,8 @@ public class TestLogin {
 		// Operation:/record/<class>/<id>?authhash=<hash>
 		String operation = "record/account/1?authhash=" + loginResponse.getAuthHash();
 		try {
-			ClientResponse response = Utils.getClient().doGet(operation);
-			String result = response.getEntity(String.class);
+			Response response = Utils.getClient().doGet(operation);
+			String result = response.readEntity(String.class);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			JsonNode recordNode = rootNode.path("record");
 			String className = recordNode.path("class").textValue();
@@ -152,8 +149,8 @@ public class TestLogin {
 			throws SerializingException, SecurityConfigurationException, JsonProcessingException {
 		String operation = "login";
 		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
-		ClientResponse response = Utils.getClient().doPost(bodyRequest, operation);
-		return response.getEntity(LoginResponse.class);
+		Response response = Utils.getClient().doPost(bodyRequest, operation);
+		return response.readEntity(LoginResponse.class);
 	}
 
 	/**

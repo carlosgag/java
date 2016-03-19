@@ -15,14 +15,20 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+
 import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
-import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 public class RESTClient {
 
@@ -30,7 +36,10 @@ public class RESTClient {
 	
 	public RESTClient() throws SecurityConfigurationException{
 		setVerifier();
-		client = Client.create(getConfig());
+		client = ClientBuilder.newBuilder()
+				.sslContext(getSSLContext())
+				.withConfig(getConfig())
+				.build();
 		
 	}
 	
@@ -103,33 +112,27 @@ public class RESTClient {
 	}
 	
 	private ClientConfig getConfig() throws SecurityConfigurationException{
-		ClientConfig config = new DefaultClientConfig();
-		HTTPSProperties httpsProperties = new HTTPSProperties(null, getSSLContext());
-		config.getProperties()
-			.put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, httpsProperties);
-		config.getFeatures()
-			.put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+		ClientConfig config = new ClientConfig();
+		config.register(MultiPartFeature.class);
+		config.register(new JacksonFeature());
 		return config;
 	}
 
-	public ClientResponse doPost(String requestBody, String operation){
-		WebResource webResource = client.resource(Config.URL + "/" + operation);
-		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED).
-				post(ClientResponse.class, requestBody);
-		return response;
+	public Response doPost(String requestBody, String operation){
+		WebTarget webTarget = client.target(Config.URL + "/" + operation);//.path("employees").path("1");
+		Invocation.Builder invocationBuilder =  webTarget.request(Config.RESPONSE_MIME_ACCEPTED);
+		return invocationBuilder.post(Entity.json(requestBody),Response.class);
 	}
 
-	public ClientResponse doPut(String requestBody, String operation){
-		WebResource webResource = client.resource(Config.URL + "/" + operation);
-		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED).
-				put(ClientResponse.class, requestBody);
-		return response;
+	public Response doPost(MultiPart multiPart, String operation) {
+		WebTarget webTarget = client.target(Config.URL + "/" + operation);
+		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+		return invocationBuilder.post(Entity.entity(multiPart, multiPart.getMediaType()));
 	}
 	
-	public ClientResponse doGet(String operation){
-		WebResource webResource = client.resource(Config.URL + "/" + operation);
-		ClientResponse response = webResource.accept(Config.RESPONSE_MIME_ACCEPTED)
-				.get(ClientResponse.class);
-		return response;
+	public Response doGet(String operation){
+		WebTarget webTarget = client.target(Config.URL + "/" + operation);//.path("employees").path("1");
+		Invocation.Builder invocationBuilder =  webTarget.request(Config.RESPONSE_MIME_ACCEPTED);
+		return invocationBuilder.get(Response.class);
 	}
 }

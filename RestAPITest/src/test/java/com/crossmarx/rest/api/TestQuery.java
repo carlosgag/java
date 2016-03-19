@@ -8,6 +8,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +26,6 @@ import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.jersey.api.client.ClientResponse;
 
 public class TestQuery {
 
@@ -47,8 +48,8 @@ public class TestQuery {
 			value = value.replace("className", "class");
 			value = URLEncoder.encode(value, "UTF-8");
 			String operation = "query?querydef=" + value + "&authhash=" + loginResponse.getAuthHash();
-			ClientResponse response = Utils.getClient().doGet(operation);
-			String result = response.getEntity(String.class);
+			Response response = Utils.getClient().doGet(operation);
+			String result = response.readEntity(String.class);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			JsonNode recordNode = rootNode.path("record");
 			JsonNode dataNode = recordNode.path("data");
@@ -71,8 +72,8 @@ public class TestQuery {
 			value = value.replace("className", "class");
 			value = URLEncoder.encode(value, "UTF-8");
 			String operation = "query?querydef=" + value + "&authhash=" + loginResponse.getAuthHash();
-			ClientResponse response = Utils.getClient().doGet(operation);
-			String result = response.getEntity(String.class);
+			Response response = Utils.getClient().doGet(operation);
+			String result = response.readEntity(String.class);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			String error = rootNode.path("message").textValue();
 			Assert.assertTrue(error.equals("<<"));
@@ -186,8 +187,8 @@ public class TestQuery {
 			throws SerializingException, SecurityConfigurationException, JsonProcessingException {
 		String bodyRequest = getLoginRequest("carlos", "oceanHouse1");
 		String operation = "login";
-		ClientResponse response = Utils.getClient().doPost(bodyRequest, operation);
-		return response.getEntity(LoginResponse.class);
+		Response response = Utils.getClient().doPost(bodyRequest, operation);
+		return response.readEntity(LoginResponse.class);
 	}
 
 	/**
