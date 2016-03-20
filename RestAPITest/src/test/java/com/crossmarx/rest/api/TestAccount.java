@@ -34,6 +34,7 @@ public class TestAccount {
 		try {
 			Response response = Utils.getClient().doGet(operation);
 			String result = response.readEntity(String.class);
+			System.out.println(result);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			JsonNode recordNode = rootNode.path("record");
 			JsonNode dataNode = recordNode.findValue("data");
@@ -63,6 +64,7 @@ public class TestAccount {
 			String result = response.readEntity(String.class);
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			String status = rootNode.path("statusMessage").toString();
+			System.out.println(status);
 			StatusMessage statusMessage = Utils.getMapper().readValue(status, StatusMessage.class);
 			Assert.assertTrue(statusMessage.getMessage().equals("Record not found"));
 		} catch (IOException | SecurityConfigurationException e) {

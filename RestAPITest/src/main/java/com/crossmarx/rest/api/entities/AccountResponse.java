@@ -1,12 +1,10 @@
 package com.crossmarx.rest.api.entities;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 public class AccountResponse {
 	
 	private StatusMessage statusMessage;
 	private String timestamp;
-	private ObjectNode record;
+	private AccountRecord record;
 	
 	public StatusMessage getStatusMessage() {
 		return statusMessage;
@@ -24,11 +22,18 @@ public class AccountResponse {
 		this.timestamp = timestamp;
 	}
 	
-	public ObjectNode getRecord() {
+	public AccountRecord getRecord() {
 		return record;
 	}
 	
-	public void setRecord(ObjectNode record) {
+	public void setRecord(AccountRecord record) {
 		this.record = record;
+	}
+	
+	@Override
+	public String toString(){
+		return "statusMessage:" + this.statusMessage + "\n" + 
+				"timestamp:" + this.timestamp + "\n" +
+				"record:" + this.record + "\n";
 	}
 }

@@ -1,13 +1,12 @@
 package com.crossmarx.rest.api.entities;
 
-import com.crossmarx.rest.api.entities.records.RecordStockItem;
+import com.crossmarx.rest.api.entities.records.StockItemRecord;
 
 public class StockItemResponse {
 
 	private StatusMessage statusMessage;
 	private String timestamp;
-	private String authhash;
-	private RecordStockItem record;
+	private StockItemRecord record;
 
 	public StatusMessage getStatusMessage() {
 		return statusMessage;
@@ -25,19 +24,11 @@ public class StockItemResponse {
 		this.timestamp = timestamp;
 	}
 
-	public String getAuthHash() {
-		return authhash;
-	}
-
-	public void setAuthhash(String authhash) {
-		this.authhash = authhash;
-	}
-
-	public RecordStockItem getRecord() {
+	public StockItemRecord getStockItemRecord() {
 		return record;
 	}
 
-	public void setRecordStockItem(RecordStockItem record) {
+	public void setStockItemRecord(StockItemRecord record) {
 		this.record = record;
 	}
 
@@ -45,7 +36,6 @@ public class StockItemResponse {
 	public String toString() {
 		return "statusMessage:" + statusMessage + "\n"+
 				"timestamp:" + timestamp + "\n"+
-				"authhash:" + authhash + "\n"+
 				"record:" + record + "\n";
 	}
 }

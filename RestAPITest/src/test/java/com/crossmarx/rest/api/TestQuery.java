@@ -21,7 +21,6 @@ import com.crossmarx.rest.api.entities.Login;
 import com.crossmarx.rest.api.entities.LoginResponse;
 import com.crossmarx.rest.api.entities.Query;
 import com.crossmarx.rest.api.entities.Spec;
-import com.crossmarx.rest.api.entities.StockItem;
 import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,14 +28,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class TestQuery {
 
-	private StockItem stockItem;
 	private LoginResponse loginResponse;
 
 	@Before
 	public void setUp() throws Exception {
 		loginResponse = getLoginResponse();
-		TestStockItem testStockItem = new TestStockItem();
-		stockItem = testStockItem.createStockItemForTest();
 	}
 
 	@Test

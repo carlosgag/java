@@ -2,7 +2,6 @@ package com.crossmarx.rest.api;
 
 import static org.junit.Assert.*;
 
-import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +21,7 @@ import com.crossmarx.rest.api.entities.Login;
 import com.crossmarx.rest.api.entities.LoginResponse;
 import com.crossmarx.rest.api.entities.StatusMessage;
 import com.crossmarx.rest.api.entities.StockItem;
+import com.crossmarx.rest.api.entities.UploadResponse;
 import com.crossmarx.rest.api.exceptions.SecurityConfigurationException;
 import com.crossmarx.rest.api.exceptions.SerializingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,30 +66,18 @@ public class TestStockItem {
 			multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
 
 			String fileName = "butterfly.jpg";
-			FileDataBodyPart fileDataBodyPart = 
-					new FileDataBodyPart("file", new File(Config.LOCAL_PATH + fileName), 
+			FileDataBodyPart fileDataBodyPart = new FileDataBodyPart(
+					"file", 
+					new File(Config.LOCAL_PATH + fileName), 
 					MediaType.APPLICATION_OCTET_STREAM_TYPE);
 	    	multiPart.bodyPart(fileDataBodyPart);
+	    	
 			Response response = Utils.getClient().doPost(multiPart, operation);
-			String result = response.readEntity(String.class);
-			JsonNode rootNode = Utils.getMapper().readTree(result);
-			String status = rootNode.path("statusMessage").toString();
-			String key = rootNode.path("key").textValue();
-			StatusMessage statusMessage = Utils.getMapper().readValue(status, StatusMessage.class);
-
-			StockItem stockItem = getStockItem(id);
-			String path = stockItem.getImage();
-			Integer index = path.lastIndexOf("/");
-			String stockItemFileName = path.substring(index+1, path.length());
-			System.out.println(statusMessage.getMessage());
-			System.out.println(key);
-			System.out.println(stockItemFileName);
-			Assert.assertTrue(statusMessage.getMessage().equals("Data saved") 
-					&& key.equals(String.valueOf(id))
-					&& fileName.equals(stockItemFileName));
+			UploadResponse uploadResponse = response.readEntity(UploadResponse.class);
+			StatusMessage statusMessage = uploadResponse.getStatusMessage();
+			Assert.assertTrue(statusMessage.getErrcode().equals(String.valueOf(ErrorCode.OK.getCode()))
+					&& uploadResponse.getKey().equals(String.valueOf(id)));
 		} catch (SecurityConfigurationException e) {
-			fail(e.getMessage());
-		} catch (IOException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -132,7 +120,7 @@ public class TestStockItem {
 			JsonNode rootNode = Utils.getMapper().readTree(result);
 			String status = rootNode.path("statusMessage").toString();
 			StatusMessage statusMessage = Utils.getMapper().readValue(status, StatusMessage.class);
-			Assert.assertTrue(statusMessage.getMessage().equals("Data saved"));
+			Assert.assertTrue(statusMessage.getErrcode().equals(ErrorCode.OK.getCode()));
 		} catch (JsonProcessingException | SecurityConfigurationException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -155,7 +143,7 @@ public class TestStockItem {
 			String status = rootNode.path("statusMessage").toString();
 			StatusMessage statusMessage = Utils.getMapper().readValue(status, StatusMessage.class);
 			stockItem = getStockItem(1);
-			Assert.assertTrue(statusMessage.getMessage().equals("Data saved") &&
+			Assert.assertTrue(statusMessage.getErrcode().equals(ErrorCode.OK.getCode()) &&
 					stockItem.getName().equals(newName));
 		} catch (JsonProcessingException | SecurityConfigurationException e) {
 			fail(e.getMessage());
@@ -175,7 +163,7 @@ public class TestStockItem {
 			Response response = Utils.getClient().doPost(body, operation);
 			String result = response.readEntity(String.class);
 			StatusMessage statusMessage = Utils.getMapper().readValue(result, StatusMessage.class);
-			Assert.assertTrue(statusMessage.getErrcode().equals("10"));
+			Assert.assertTrue(statusMessage.getErrcode().equals(ErrorCode.REQUEST_ERROR));
 		} catch (SecurityConfigurationException | JsonProcessingException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
