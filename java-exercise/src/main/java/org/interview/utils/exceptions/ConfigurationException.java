@@ -1,11 +1,16 @@
-package org.interview.oauth.twitter.exceptions;
+package org.interview.utils.exceptions;
 
 /**
  * Created by carlos.gagliardi on 01/12/2015.
  */
 public class ConfigurationException extends Exception {
 
-    public ConfigurationException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2500769768116844781L;
+
+	public ConfigurationException() {
         super();
     }
 

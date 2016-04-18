@@ -1,26 +1,16 @@
-package org.interview.oauth.twitter;
-
-import java.util.Date;
+package org.interview.entities;
 
 import twitter4j.User;
 
 /**
  * Created by carlos.gagliardi on 25/11/2015.
  */
-public class TwitterMessage /*implements Comparable<TwitterMessage>*/ {
+public class TwitterMessage implements Comparable<TwitterMessage> {
 
 	private Long id;
 	private long created_at;
 	private String text;
 	private User user;
-
-	@Override
-	public String toString() {
-		return 	"Id: " + id + "\n" + 
-				"Created_at: " + created_at + "\n" + 
-				"Text: " + text + "\n" + 
-				"User: " + user + "\n";
-	}
 
 	public Long getId() {
 		return id;
@@ -54,7 +44,21 @@ public class TwitterMessage /*implements Comparable<TwitterMessage>*/ {
 		this.user = user;
 	}
 
-//	public int compareTo(TwitterMessage m1) {
-//		return this.created_at.compareTo(m1.created_at);
-//	}
+	@Override
+	public String toString() {
+		return "Id: " + id + "\n" + 
+				"Created_at: " + created_at + "\n" + 
+				"Text: " + text + "\n" + 
+				"User: " + user.getId() + " - " + 
+				user.getCreatedAt().getTime() + " - " + 
+				user.getName() + " - " + 
+				user.getScreenName() + "\n";
+	}
+
+	@Override
+	public int compareTo(TwitterMessage m1) {
+		long compareCreationDate = ((TwitterMessage) m1).getCreated_at();
+		return (int) (this.created_at - compareCreationDate);
+	}
+
 }

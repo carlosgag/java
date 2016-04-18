@@ -2,6 +2,11 @@ package org.interview.oauth.twitter.exceptions;
 
 public class TwitterAuthenticationException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6142374240122792709L;
+
 	public TwitterAuthenticationException() {
 		super();
 	}

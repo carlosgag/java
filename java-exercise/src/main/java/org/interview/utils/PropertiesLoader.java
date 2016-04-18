@@ -1,10 +1,10 @@
-package org.interview.oauth.twitter;
+package org.interview.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.interview.oauth.twitter.exceptions.ConfigurationException;
+import org.interview.utils.exceptions.ConfigurationException;
 
 /**
  * Created by carlos.gagliardi on 25/11/2015.

@@ -24,7 +24,7 @@ While no specific time limit is mandated to complete the exercise, you will be a
 
 ## Task ##
 
-We would like you to write code that will cover the functionality explained below and provide us with the source, instructions to build and run the appliocation  as well as a sample output of an execution:
+We would like you to write code that will cover the functionality explained below and provide us with the source, instructions to build and run the application  as well as a sample output of an execution:
 
 + Connect to the [Twitter Streaming API](https://dev.twitter.com/streaming/overview)
     * Use the following values:
@@ -32,22 +32,31 @@ We would like you to write code that will cover the functionality explained belo
         + Consumer Secret: `FTz2KcP1y3pcLw0XXMX5Jy3GTobqUweITIFy4QefullmpPnKm4`
     * The app name will be `java-exercise`
     * You will need to login with Twitter
-+ Filter messages that track on "bieber"
+DONE
++ Filter messages that track on "bieber" 
+DONE
 + Retrieve the incoming messages for 30 seconds or up to 100 messages, whichever comes first
+DONE
 + Your application should return the messages grouped by user (users sorted chronologically, ascending)
+DONE
 + The messages per user should also be sorted chronologically, ascending
+DONE
 + For each message, we will need the following:
     * The message ID
     * The creation date of the message as epoch value
     * The text of the message
     * The author of the message
+DONE
 + For each author, we will need the following:
     * The user ID
     * The creation date of the user as epoch value
     * The name of the user
     * The screen name of the user
+DONE
 + All the above infomation is provided in either SDTOUT or a log file
+DONE
 + You are free to choose the output format, provided that it makes it easy to parse and process by a machine
+DONE
 
 ### __Bonus points for:__ ###
 
