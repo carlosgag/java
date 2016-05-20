@@ -3,6 +3,7 @@ package com.crossmarx.rest.api;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -120,18 +121,36 @@ public class RESTClient {
 
 	public Response doPost(String requestBody, String operation){
 		WebTarget webTarget = client.target(Config.URL + "/" + operation);//.path("employees").path("1");
+		try {
+			System.out.println(webTarget.getUri().toURL().toString());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Invocation.Builder invocationBuilder =  webTarget.request(Config.RESPONSE_MIME_ACCEPTED);
 		return invocationBuilder.post(Entity.json(requestBody),Response.class);
 	}
 
 	public Response doPost(MultiPart multiPart, String operation) {
 		WebTarget webTarget = client.target(Config.URL + "/" + operation);
+		try {
+			System.out.println(webTarget.getUri().toURL().toString());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
 		return invocationBuilder.post(Entity.entity(multiPart, multiPart.getMediaType()));
 	}
 	
 	public Response doGet(String operation){
 		WebTarget webTarget = client.target(Config.URL + "/" + operation);//.path("employees").path("1");
+		try {
+			System.out.println(webTarget.getUri().toURL().toString());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Invocation.Builder invocationBuilder =  webTarget.request(Config.RESPONSE_MIME_ACCEPTED);
 		return invocationBuilder.get(Response.class);
 	}
