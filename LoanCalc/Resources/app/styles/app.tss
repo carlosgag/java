@@ -1,0 +1,13 @@
+// 'Window[platform=mobileweb]': {
+// barColor: '#CD1625',
+// color: '#FFF' // barTitle
+// }
+"#label1":{
+	color: '#999',
+	font:{
+		fontSize: 20,
+		fontFamily: 'Helvetica Neue'
+	},
+	textAlign: 'center',
+	width: 'auto'
+}

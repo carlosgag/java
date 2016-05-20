@@ -1,0 +1,8 @@
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/android/support/v7/appcompat/R.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/android/support/v7/cardview/R.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/com/app/loancalc/AssetCryptImpl.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/com/app/loancalc/LoancalcActivity.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/com/app/loancalc/LoancalcAppInfo.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/com/app/loancalc/LoancalcApplication.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/com/app/loancalc/R.java"
+"D:/Carlos/Appcelerator_Studio_Workspace/LoanCalc/build/android/gen/ti/modules/titanium/ui/R.java"
