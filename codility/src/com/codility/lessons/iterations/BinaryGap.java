@@ -54,13 +54,44 @@ public class BinaryGap {
 		}
 		return gap;
 	}
+	
+	public int solution3(int N){
+		int gap = 0;
+		boolean hasOne = false; 
+		int gapCandidate = gap;		
+		System.out.println(N);
+		while (N > 0) {
+			int digit = N - (N / 10) * 10;
+			//System.out.print(digit + " ");
+			N = N / 10;
+			if(digit != 0){
+				if(gapCandidate > 0) {
+//					System.out.println();
+//					System.out.println("gapCandidate: " + gapCandidate);
+					if(gapCandidate > gap){
+						gap = gapCandidate;
+					}
+					gapCandidate = 0;
+				}
+				hasOne = true;
+			} else if(digit == 0 && hasOne == true){
+				gapCandidate = gapCandidate + 1;
+			}else{
+				// N isn't a valid binary number
+			}
+		}
+		return gap;
+	}
 
 	public static void main(String[] args) {
 		BinaryGap bg = new BinaryGap();
 		for (int i = 0; i < 10; i++) {
 			double rnd = Math.random();
-			System.out.println(bg.solution((int) (rnd * 1000)));
-			System.out.println(bg.solution2((int) (rnd * 1000)));
+			int binary = Integer.parseInt(Integer.toBinaryString((int) (rnd * 1000)));
+			System.out.println("Binary: " + binary);
+//			System.out.println(bg.solution(binary));
+//			System.out.println(bg.solution2(binary));
+			System.out.println(bg.solution3(binary));
 			System.out.println("-------------------------");
 		}
 	}
