@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="assignment7/directory/src/main/java"/>
+	<classpathentry kind="src" path="codility/src"/>
+	<classpathentry kind="src" path="codility/test"/>
+	<classpathentry kind="src" path="cxstudio/src"/>
+	<classpathentry kind="src" path="cxstudio/tests"/>
+	<classpathentry kind="src" path="DutchPostalCodes/src"/>
+	<classpathentry kind="src" path="DutchPostalCodes/tests"/>
+	<classpathentry kind="src" path="Mobiquity/src"/>
+	<classpathentry kind="src" path="Mobiquity/test"/>
+	<classpathentry kind="src" path="oauthwebapp/src/main/java"/>
+	<classpathentry kind="src" path="RestAPITest/src/main/java"/>
+	<classpathentry kind="src" path="RestAPITest/src/test/java"/>
+	<classpathentry kind="src" path="ThreadsExamples/src"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-aop-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-beans-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-context-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-core-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-expression-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-web-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="oauthwebapp/target/oauthwebapp/WEB-INF/lib/spring-webmvc-4.2.3.RELEASE.jar"/>
+	<classpathentry kind="output" path="RestAPITest/target/classes"/>
+</classpath>
