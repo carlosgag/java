@@ -2,7 +2,7 @@ package com.javacodegeeks.advanced.objects;
 
 import java.util.Arrays;
 
-public class Office implements Cloneable {
+public class Office implements Cloneable {//Cloneable is a marker interface, i.e. hasn't methods 
 	private PersonEquals[] persons;
 
 	public Office(PersonEquals... persons) {
