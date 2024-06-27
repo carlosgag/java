@@ -25,6 +25,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> generic(Exception exception) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(ErrorMessage.builder().msg("Non identified error").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ErrorMessage.builder()
+                .msg("Non identified error")
+                .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
