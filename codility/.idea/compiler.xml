@@ -9,11 +9,5 @@
         <module name="codility" />
       </profile>
     </annotationProcessing>
-<<<<<<< HEAD
-=======
-    <bytecodeTargetLevel>
-      <module name="codility" target="11" />
-    </bytecodeTargetLevel>
->>>>>>> 4ea529598cab711351f227ed78aafbc3a7b7e6b5
   </component>
 </project>

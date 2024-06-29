@@ -2,15 +2,9 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
-<<<<<<< HEAD
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
-=======
-      <option name="id" value="github" />
-      <option name="name" value="GitHub OWNER Apache Maven Packages" />
-      <option name="url" value="https://maven.pkg.github.com/globalization-partners/gp-zoho-dto" />
->>>>>>> 4ea529598cab711351f227ed78aafbc3a7b7e6b5
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -22,13 +16,5 @@
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
-<<<<<<< HEAD
-=======
-    <remote-repository>
-      <option name="id" value="central" />
-      <option name="name" value="central" />
-      <option name="url" value="https://repo1.maven.org/maven2" />
-    </remote-repository>
->>>>>>> 4ea529598cab711351f227ed78aafbc3a7b7e6b5
   </component>
 </project>
