@@ -3,6 +3,7 @@ package com.etraveli.cardcost.paymentcost;
 import com.etraveli.cardcost.binlist.BinListRepository;
 import com.etraveli.cardcost.binlist.entities.Country;
 import com.etraveli.cardcost.binlist.entities.Response;
+import com.etraveli.cardcost.binlist.exceptions.ExternalAPIException;
 import com.etraveli.cardcost.clearingcostmatrix.CostMatrixService;
 import com.etraveli.cardcost.entities.ClearingCost;
 import org.apache.logging.log4j.util.Strings;
@@ -18,6 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,11 +39,35 @@ class PaymentServiceTest implements WithAssertions {
     @Mock
     private GetIIN getIIN;
 
+    @Mock
+    private GetCachedCost getCachedCost;
+
     private PaymentService paymentService;
 
     @BeforeEach
     void setup() {
-        paymentService = new PaymentService(binListRepository, costMatrixService, getIIN);
+        paymentService = new PaymentService(binListRepository, costMatrixService, getIIN, getCachedCost);
+    }
+
+    @Test
+    void testExceptionCatchingHasCache() {
+        doThrow(ExternalAPIException.class).when(binListRepository).get(any());
+        ClearingCost clearingCost = ClearingCost.builder()
+                .cost(COST)
+                .build();
+        when(getCachedCost.apply(CARD_NUMBER))
+                .thenReturn(clearingCost);
+        final var result = paymentService.calculateCost(CARD_NUMBER);
+        assertThat(result.getCost()).isEqualTo(COST);
+    }
+
+    @Test
+    void testExceptionCatchingHasNotCache() {
+        doThrow(ExternalAPIException.class).when(binListRepository).get(any());
+        when(getCachedCost.apply(CARD_NUMBER))
+                .thenReturn(null);
+        assertThatExceptionOfType(ExternalAPIException.class)
+                .isThrownBy(() -> paymentService.calculateCost(CARD_NUMBER));
     }
 
     @ParameterizedTest

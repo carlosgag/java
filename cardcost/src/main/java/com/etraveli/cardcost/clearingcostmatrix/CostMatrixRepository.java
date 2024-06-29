@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CostMatrixRepository {
 
-private final DB db;
+    private final DB db;
 
     public CostMatrixRepository(DB db) {
         this.db = db;
