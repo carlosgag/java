@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CostMatrixControllerTest implements WithAssertions {
+    public static final String COUNTRY_ID = "countryId";
     @Mock
     CostMatrixService costMatrixService;
 
@@ -25,7 +26,7 @@ class CostMatrixControllerTest implements WithAssertions {
 
     @Test
     void testGet() {
-        assertThat(costMatrixController.get("test")).isNull();
+        assertThat(costMatrixController.get(COUNTRY_ID)).isNull();
     }
 
     @Test
@@ -38,5 +39,17 @@ class CostMatrixControllerTest implements WithAssertions {
     void testPut() {
         costMatrixController.put(ClearingCost.builder().build());
         verify(costMatrixService).put(any());
+    }
+
+    @Test
+    void testDelete() {
+        costMatrixController.delete(COUNTRY_ID);
+        verify(costMatrixService).delete(COUNTRY_ID);
+    }
+
+    @Test
+    void testHealth() {
+        final var result = costMatrixController.health();
+        assertThat(result).isEqualTo("OK");
     }
 }

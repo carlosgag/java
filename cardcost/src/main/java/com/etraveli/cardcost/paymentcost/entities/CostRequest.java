@@ -1,13 +1,19 @@
 package com.etraveli.cardcost.paymentcost.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
-@Builder
-public record CostRequest(
-        @JsonProperty("card_number")
-        @NonNull
-                @Size(min = 2, max = 9)
-        String cardNumber) {
+@Data
+@Validated
+@NoArgsConstructor
+public class CostRequest {
+    @JsonProperty("card_number")
+    @NotEmpty(message = "Card number cannot be empty")
+    @Pattern(regexp = "^\\d{6}$", message = "Card number must contain 6 digits")
+    private String cardNumber;
+
 }

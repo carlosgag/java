@@ -1,4 +1,4 @@
-package com.etraveli.cardcost.core;
+package com.etraveli.cardcost.entities;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatusCode;
