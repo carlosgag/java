@@ -1,34 +1,42 @@
 package com.etraveli.cardcost.clearingcostmatrix;
 
 import com.etraveli.cardcost.entities.ClearingCost;
+import com.etraveli.cardcost.persistence.H2DB;
+import com.etraveli.cardcost.persistence.data.ClearingCostData;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CostMatrixRepository {
 
-    private final DB db;
+    private final H2DB db;
 
-    public CostMatrixRepository(DB db) {
+    public CostMatrixRepository(H2DB db) {
         this.db = db;
     }
 
     public ClearingCost get(String country) {
-        Double cost = db.get(country);
-        return cost != null ? ClearingCost.builder()
-                .cost(cost)
-                .country(country)
-                .build() : null;
+        ClearingCostData cost = db.get(country);
+        return ClearingCost.builder()
+                .cost(cost.getCost())
+                .country(cost.getCountry())
+                .build();
     }
 
     public void post(ClearingCost clearingCost) {
-        db.put(clearingCost.getCountry(), clearingCost.getCost());
+        db.post(ClearingCostData.builder()
+                .cost(clearingCost.getCost())
+                .country(clearingCost.getCountry())
+                .build());
     }
 
-    public void put(ClearingCost clearingCost) {
-        db.replace(clearingCost.getCountry(), clearingCost.getCost());
+    public void update(ClearingCost clearingCost) {
+        db.update(ClearingCostData.builder()
+                .country(clearingCost.getCountry())
+                .cost(clearingCost.getCost())
+                .build());
     }
 
     public void delete(String countryId) {
-        db.remove(countryId);
+        db.delete(countryId);
     }
 }

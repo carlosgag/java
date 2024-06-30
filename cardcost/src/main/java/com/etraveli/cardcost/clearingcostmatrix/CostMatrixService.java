@@ -19,8 +19,8 @@ public class CostMatrixService {
         costMatrixRepository.post(clearingCost);
     }
 
-    public void put(ClearingCost clearingCost) {
-        costMatrixRepository.put(clearingCost);
+    public void update(ClearingCost clearingCost) {
+        costMatrixRepository.update(clearingCost);
     }
 
     public void delete(String countryId) {

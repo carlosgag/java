@@ -36,9 +36,9 @@ class CostMatrixControllerTest implements WithAssertions {
     }
 
     @Test
-    void testPut() {
-        costMatrixController.put(ClearingCost.builder().build());
-        verify(costMatrixService).put(any());
+    void testUpdate() {
+        costMatrixController.update(ClearingCost.builder().build());
+        verify(costMatrixService).update(any());
     }
 
     @Test

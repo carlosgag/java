@@ -45,16 +45,16 @@ class CostMatrixServiceTest implements WithAssertions {
     }
 
     @Test
-    void testPut() {
-        ClearingCost clearingCost = Mockito.mock(ClearingCost.class);
-        costMatrixService.put(clearingCost);
-        verify(costMatrixRepository).put(clearingCost);
-    }
-
-    @Test
     void testDelete() {
         costMatrixService.delete(COUNTRY_ID);
         verify(costMatrixRepository).delete(COUNTRY_ID);
+    }
+
+    @Test
+    void testUpdate() {
+        ClearingCost clearingCost = Mockito.mock(ClearingCost.class);
+        costMatrixService.update(clearingCost);
+        verify(costMatrixRepository).update(clearingCost);
     }
 
 }

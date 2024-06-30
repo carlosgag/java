@@ -2,8 +2,6 @@ package com.etraveli.cardcost.binlist;
 
 import com.etraveli.cardcost.binlist.entities.Response;
 import com.etraveli.cardcost.binlist.exceptions.ExternalAPIException;
-import com.etraveli.cardcost.entities.ClearingCost;
-import com.hazelcast.core.HazelcastInstance;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -12,7 +10,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
-import java.util.concurrent.ConcurrentMap;
 
 @Repository
 @Slf4j

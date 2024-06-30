@@ -25,8 +25,8 @@ public class CostMatrixController {
     }
 
     @PutMapping
-    public void put(@RequestBody ClearingCost clearingCost) {
-        costMatrixService.put(clearingCost);
+    public void update(@RequestBody ClearingCost clearingCost) {
+        costMatrixService.update(clearingCost);
     }
 
     @DeleteMapping("/country/{countryId}")

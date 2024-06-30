@@ -5,11 +5,8 @@ import com.etraveli.cardcost.binlist.entities.Response;
 import com.etraveli.cardcost.binlist.exceptions.ExternalAPIException;
 import com.etraveli.cardcost.clearingcostmatrix.CostMatrixService;
 import com.etraveli.cardcost.entities.ClearingCost;
-import com.hazelcast.core.HazelcastInstance;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class PaymentService {
