@@ -1,11 +1,15 @@
 package com.etraveli.cardcost.clearingcostmatrix;
 
 import com.etraveli.cardcost.entities.ClearingCost;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/costs")
+@Validated
 public class CostMatrixController {
 
     private final CostMatrixService costMatrixService;
@@ -20,7 +24,7 @@ public class CostMatrixController {
     }
 
     @PostMapping
-    public void post(@RequestBody @NotEmpty ClearingCost clearingCost) {
+    public void post(@Valid @RequestBody @NotNull ClearingCost clearingCost) {
         costMatrixService.post(clearingCost);
     }
 

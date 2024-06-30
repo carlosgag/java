@@ -23,17 +23,11 @@ public class CostMatrixRepository {
     }
 
     public void post(ClearingCost clearingCost) {
-        db.post(ClearingCostData.builder()
-                .cost(clearingCost.getCost())
-                .country(clearingCost.getCountry())
-                .build());
+        db.post(new ClearingCostData(clearingCost.getCountry(), clearingCost.getCost()));
     }
 
     public void update(ClearingCost clearingCost) {
-        db.update(ClearingCostData.builder()
-                .country(clearingCost.getCountry())
-                .cost(clearingCost.getCost())
-                .build());
+        db.update(new ClearingCostData(clearingCost.getCountry(), clearingCost.getCost()));
     }
 
     public void delete(String countryId) {
