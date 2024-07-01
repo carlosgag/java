@@ -1,2 +1,2 @@
-# java
-Java examples
+# USES CASES
+- Card Cost API
