@@ -23,7 +23,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers("/api/v1/auth/**", "/h2/**", "/api-docs/**", "/actuator/**", "/swagger-ui.html", "/swagger-ui/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated());
