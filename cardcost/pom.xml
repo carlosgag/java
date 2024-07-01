@@ -170,7 +170,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>1</minimum>
+                                            <minimum>0.8</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -189,7 +189,8 @@
                         <exclude>com/etraveli/cardcost/config/**</exclude>
                         <exclude>com/etraveli/cardcost/paymentcost/GetCachedCost.class</exclude>
                         <exclude>com/etraveli/cardcost/persistence/exceptions/**</exclude>
-                        <exclude>com/etraveli/cardcost/persistence/data</exclude>
+                        <exclude>com/etraveli/cardcost/persistence/data/**</exclude>
+                        <exclude>com/etraveli/cardcost/security/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

@@ -4,4 +4,4 @@ INSERT INTO CLEARING_COST VALUES
 ('Others', 10.0);
 
 INSERT INTO USERS VALUES
-('admin', 'admin', 'ADMIN');
+('carlosgag@gmail.com', 'password', 'ADMIN');

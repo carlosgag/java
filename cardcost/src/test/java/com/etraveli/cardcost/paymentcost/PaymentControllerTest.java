@@ -31,7 +31,7 @@ class PaymentControllerTest implements WithAssertions {
         CostRequest costRequest = new CostRequest();
         costRequest.setCardNumber("123456");
         final var result = paymentController.calculateCost(costRequest);
-        assertThat(result.getCost()).isEqualTo(EXPECTED);
+        assertThat(result.getBody().getCost()).isEqualTo(EXPECTED);
     }
 
 

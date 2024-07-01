@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTest implements WithAssertions {
@@ -27,12 +28,6 @@ public class IntegrationTest implements WithAssertions {
         costRequest.setCardNumber("123456");
         final var result = testRestTemplate
                 .postForEntity("/payment-cards-cost", costRequest, ClearingCost.class);
-        if (result != null && !result.getStatusCode().is2xxSuccessful()) {
-            assertThat(result.getBody()).isNotNull();
-        } else if (result != null && result.getBody() == null) {
-            assertThat(result.getBody()).isNull(); // circuit breaker default policy fallback
-        } else {
-            assertThat(result.getBody().getCost()).isEqualTo(10.0);
-        }
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 }

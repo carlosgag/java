@@ -30,7 +30,7 @@ public class PaymentService {
         Response response;
         try {
             response = binListRepository.get(getIIN.apply(cardNumber));
-            if (response.country() != null) {
+            if (response.country() != null && response.country().alpha2() != null) {
                 ClearingCost clearingCost = costMatrixService.get(response.country().alpha2());
                 if (clearingCost != null && clearingCost.getCountry() == null) {
                     clearingCost.setCountry("Others");
