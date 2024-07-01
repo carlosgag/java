@@ -1,2 +1,2 @@
-# USES CASES
+# USE CASES
 - Card Cost API
