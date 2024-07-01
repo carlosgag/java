@@ -3,6 +3,7 @@ package com.etraveli.cardcost.config;
 import com.etraveli.cardcost.binlist.exceptions.ExternalAPIException;
 import com.etraveli.cardcost.entities.ClearingCost;
 import com.etraveli.cardcost.entities.ErrorMessage;
+import com.etraveli.cardcost.persistence.exceptions.PersistenceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -28,11 +29,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> validation(MethodArgumentNotValidException exception) {
         log.error(exception.getMessage());
+        String msg = Objects.requireNonNull(exception.getBindingResult().getFieldError("cardNumber"))
+                .getDefaultMessage();
         return new ResponseEntity<>(ErrorMessage.builder()
-                .msg(String.format("Validation error: %s",
-                        Objects.requireNonNull(exception.getBindingResult().getFieldError("cardNumber")).getDefaultMessage()))
+                .msg(String.format("Validation error: %s", msg))
                 .description(exception.getMessage())
                 .build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public ResponseEntity<ErrorMessage> persistenceExceptionHandler(PersistenceException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(ErrorMessage.builder()
+                .msg(exception.getMsg())
+                .build(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(Exception.class)

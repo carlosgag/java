@@ -1,6 +1,7 @@
 package com.etraveli.cardcost.persistence;
 
 import com.etraveli.cardcost.persistence.data.ClearingCostData;
+import com.etraveli.cardcost.persistence.exceptions.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,24 +15,40 @@ public class H2DB implements DB {
 
     @Override
     public ClearingCostData get(String countryId) {
-        return jpaRepository.findById(countryId).orElse(null);
+        try {
+            return jpaRepository.findById(countryId).orElse(null);
+        } catch (Exception e) {
+            throw new PersistenceException("Error getting ClearingCost", e);
+        }
     }
 
     @Override
     @Transactional
     public void post(ClearingCostData clearingCostData) {
-        jpaRepository.save(clearingCostData);
+        try {
+            jpaRepository.save(clearingCostData);
+        } catch (Exception e) {
+            throw new PersistenceException("Error adding ClearingCost", e);
+        }
     }
 
     @Override
     @Transactional
     public void update(ClearingCostData clearingCostData) {
-        this.post(clearingCostData);
+        try {
+            this.post(clearingCostData);
+        } catch (Exception e) {
+            throw new PersistenceException("Error updating ClearingCost", e);
+        }
     }
 
     @Override
     public void delete(String countryId) {
-        jpaRepository.deleteById(countryId);
+        try {
+            jpaRepository.deleteById(countryId);
+        } catch (Exception e) {
+            throw new PersistenceException("Error deleting ClearingCost", e);
+        }
     }
 
 }

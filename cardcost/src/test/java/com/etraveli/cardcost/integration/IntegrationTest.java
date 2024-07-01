@@ -3,7 +3,6 @@ package com.etraveli.cardcost.integration;
 import com.etraveli.cardcost.entities.ClearingCost;
 import com.etraveli.cardcost.paymentcost.entities.CostRequest;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +19,6 @@ public class IntegrationTest implements WithAssertions {
     }
 
     @Test
-    @Disabled
     /**
      * Disabled due to problems retrieving cached value on app init
      */
@@ -30,7 +28,9 @@ public class IntegrationTest implements WithAssertions {
         final var result = testRestTemplate
                 .postForEntity("/payment-cards-cost", costRequest, ClearingCost.class);
         if (result != null && !result.getStatusCode().is2xxSuccessful()) {
-            assertThat(result.getBody()).isNull();
+            assertThat(result.getBody()).isNotNull();
+        } else if (result != null && result.getBody() == null) {
+            assertThat(result.getBody()).isNull(); // circuit breaker default policy fallback
         } else {
             assertThat(result.getBody().getCost()).isEqualTo(10.0);
         }

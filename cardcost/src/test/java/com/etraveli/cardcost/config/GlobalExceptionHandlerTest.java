@@ -1,6 +1,7 @@
 package com.etraveli.cardcost.config;
 
 import com.etraveli.cardcost.binlist.exceptions.ExternalAPIException;
+import com.etraveli.cardcost.persistence.exceptions.PersistenceException;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,7 @@ class GlobalExceptionHandlerTest implements WithAssertions {
 
     @Test
     void testMethodArgumentNotValidException() {
+        //  GIVEN
         MethodArgumentNotValidException methodArgumentNotValidException = Mockito
                 .mock(MethodArgumentNotValidException.class);
         BindingResult bindingResult = Mockito.mock(BindingResult.class);
@@ -43,7 +45,9 @@ class GlobalExceptionHandlerTest implements WithAssertions {
         when(bindingResult.getFieldError(any())).thenReturn(fieldError);
         when(methodArgumentNotValidException.getBindingResult())
                 .thenReturn(bindingResult);
+        //  WHEN
         final var result = globalExceptionHandler.validation(methodArgumentNotValidException);
+        //  THEN
         assertThat(Objects.requireNonNull(result.getStatusCode()))
                 .isEqualTo(HttpStatus.BAD_REQUEST);
     }
@@ -61,5 +65,15 @@ class GlobalExceptionHandlerTest implements WithAssertions {
         //  THEN
         assertThat(Objects.requireNonNull(result.getStatusCode()))
                 .isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testPersistenceException() {
+        //  GIVEN
+        PersistenceException persistenceException = Mockito.mock(PersistenceException.class);
+        //  WHEN
+        final var result = globalExceptionHandler.persistenceExceptionHandler(persistenceException);
+        //  THEN
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

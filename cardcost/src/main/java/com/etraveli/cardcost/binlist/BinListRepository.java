@@ -3,6 +3,7 @@ package com.etraveli.cardcost.binlist;
 import com.etraveli.cardcost.binlist.entities.Response;
 import com.etraveli.cardcost.binlist.exceptions.ExternalAPIException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,8 @@ public class BinListRepository {
         this.restTemplate = new RestTemplate();
     }
 
-    @CircuitBreaker(name = "binList", fallbackMethod = "fallback")
+    @CircuitBreaker(name = "binList", fallbackMethod = "fallBack")
+    @Retry(name = "binList", fallbackMethod = "fallBack")
     public Response get(String card) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(ACCEPT_VERSION, API_VERSION);
@@ -50,9 +52,10 @@ public class BinListRepository {
         }
     }
 
-    public Response fallBack(String card, Exception exception) {
+    private Response fallBack(String card, Exception exception) {
+        //  TODO implement different fallbacks for each operation, adding retries inside de fallback or message queue
         final var msg = exception.getMessage();
         log.error("Circuit breaker exception querying card {}:{}", card, msg);
-        return Response.builder().build();
+        throw new ExternalAPIException(HttpStatus.FAILED_DEPENDENCY, ERROR_ACCESSING_EXTERNAL_API);
     }
 }
