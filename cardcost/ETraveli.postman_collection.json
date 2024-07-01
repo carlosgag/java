@@ -1,0 +1,205 @@
+{
+  "info": {
+    "_postman_id": "901a0e51-f86e-400c-a114-a1e1dc5157f9",
+    "name": "ETraveli",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "3409936"
+  },
+  "item": [
+    {
+      "name": "cost matrix",
+      "item": [
+        {
+          "name": "get",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/costs/country/GR",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "costs",
+                "country",
+                "GR"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/costs/country/GR",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "costs",
+                "country",
+                "GR"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"country\": \"GR\",\r\n    \"cost\": 15\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/costs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "costs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "put",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"country\": \"GR\",\r\n    \"cost\": 15\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/costs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "costs"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "binlist",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept-Version",
+            "value": "3",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://lookup.binlist.net/552671",
+          "protocol": "https",
+          "host": [
+            "lookup",
+            "binlist",
+            "net"
+          ],
+          "path": [
+            "552671"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Payment cards cost",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"card_number\": \"552671\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/payment-cards-cost",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "payment-cards-cost"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "test",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/test",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "test"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

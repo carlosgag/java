@@ -1,16 +1,16 @@
 package com.etraveli.cardcost.clearingcostmatrix;
 
 import com.etraveli.cardcost.entities.ClearingCost;
-import com.etraveli.cardcost.persistence.H2DB;
+import com.etraveli.cardcost.persistence.ClearingCostH2DB;
 import com.etraveli.cardcost.persistence.data.ClearingCostData;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CostMatrixRepository {
 
-    private final H2DB db;
+    private final ClearingCostH2DB db;
 
-    public CostMatrixRepository(H2DB db) {
+    public CostMatrixRepository(ClearingCostH2DB db) {
         this.db = db;
     }
 

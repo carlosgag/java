@@ -1,13 +1,11 @@
 package com.etraveli.cardcost.persistence;
 
-import com.etraveli.cardcost.persistence.data.ClearingCostData;
+public interface DB<T, S> {
+    T get(S s);
 
-public interface DB {
-    ClearingCostData get(String countryId);
+    void post(T t);
 
-    void post(ClearingCostData clearingCostData);
+    void update(T t);
 
-    void update(ClearingCostData clearingCostData);
-
-    void delete(String countryId);
+    void delete(S s);
 }

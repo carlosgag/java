@@ -6,17 +6,17 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class H2DB implements DB {
-    private final JPARepository jpaRepository;
+public class ClearingCostH2DB implements DB<ClearingCostData, String> {
+    private final ClearingCostJPARepository clearingCostJpaRepository;
 
-    public H2DB(JPARepository jpaRepository) {
-        this.jpaRepository = jpaRepository;
+    public ClearingCostH2DB(ClearingCostJPARepository clearingCostJpaRepository) {
+        this.clearingCostJpaRepository = clearingCostJpaRepository;
     }
 
     @Override
     public ClearingCostData get(String countryId) {
         try {
-            return jpaRepository.findById(countryId).orElse(null);
+            return clearingCostJpaRepository.findById(countryId).orElse(null);
         } catch (Exception e) {
             throw new PersistenceException("Error getting ClearingCost", e);
         }
@@ -26,7 +26,7 @@ public class H2DB implements DB {
     @Transactional
     public void post(ClearingCostData clearingCostData) {
         try {
-            jpaRepository.save(clearingCostData);
+            clearingCostJpaRepository.save(clearingCostData);
         } catch (Exception e) {
             throw new PersistenceException("Error adding ClearingCost", e);
         }
@@ -45,7 +45,7 @@ public class H2DB implements DB {
     @Override
     public void delete(String countryId) {
         try {
-            jpaRepository.deleteById(countryId);
+            clearingCostJpaRepository.deleteById(countryId);
         } catch (Exception e) {
             throw new PersistenceException("Error deleting ClearingCost", e);
         }
