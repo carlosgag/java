@@ -8,7 +8,7 @@
         <version>3.3.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.etraveli</groupId>
+    <groupId>com.cardcost</groupId>
     <artifactId>cardcost</artifactId>
     <version>0.0.1</version>
     <name>Card Cost API</name>
@@ -180,17 +180,17 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>com/etraveli/cardcost/CardCostApiApplication.class</exclude>
-                        <exclude>com/etraveli/cardcost/entities/**</exclude>
-                        <exclude>com/etraveli/cardcost/binlist/**</exclude>
-                        <exclude>com/etraveli/cardcost/paymentcost/entities/**</exclude>
-                        <exclude>com/etraveli/cardcost/clearingcostmatrix/DB.class</exclude>
-                        <exclude>com/etraveli/cardcost/clearingcostmatrix/CostMatrixRepository.class</exclude>
-                        <exclude>com/etraveli/cardcost/config/**</exclude>
-                        <exclude>com/etraveli/cardcost/paymentcost/GetCachedCost.class</exclude>
-                        <exclude>com/etraveli/cardcost/persistence/exceptions/**</exclude>
-                        <exclude>com/etraveli/cardcost/persistence/data/**</exclude>
-                        <exclude>com/etraveli/cardcost/security/**</exclude>
+                        <exclude>com/cardcost/CardCostApiApplication.class</exclude>
+                        <exclude>com/cardcost/entities/**</exclude>
+                        <exclude>com/cardcost/binlist/**</exclude>
+                        <exclude>com/cardcost/paymentcost/entities/**</exclude>
+                        <exclude>com/cardcost/clearingcostmatrix/DB.class</exclude>
+                        <exclude>com/cardcost/clearingcostmatrix/CostMatrixRepository.class</exclude>
+                        <exclude>com/cardcost/config/**</exclude>
+                        <exclude>com/cardcost/paymentcost/GetCachedCost.class</exclude>
+                        <exclude>com/cardcost/persistence/exceptions/**</exclude>
+                        <exclude>com/cardcost/persistence/data/**</exclude>
+                        <exclude>com/cardcost/security/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

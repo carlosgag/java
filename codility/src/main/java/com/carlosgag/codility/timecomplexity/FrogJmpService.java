@@ -17,6 +17,6 @@ public class FrogJmpService implements Function<FrogJmpService.Params, Integer> 
     }
 
     @Builder
-    record Params(Integer x, Integer y, Integer d) {
+    public record Params(Integer x, Integer y, Integer d) {
     }
 }

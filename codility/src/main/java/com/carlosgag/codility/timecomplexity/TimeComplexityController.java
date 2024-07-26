@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TimeComplexityController {
     private final FrogJmpService frogJmpService;
+    private final PermMissingElemService permMissingElemService;
+    private final TapeEquilibriumService tapeEquilibriumService;
 
     @GetMapping("/frog-jump/x/{x}/y/{y}/d/{d}")
     public ResponseEntity<Integer> frogJump(@PathVariable Integer x,
@@ -23,6 +25,26 @@ public class TimeComplexityController {
                 .y(y)
                 .d(d)
                 .build());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/perm-missing-elem/array/{array}")
+    public ResponseEntity<Integer> permMissingElem(@PathVariable String [] array) {
+        Integer [] A = new Integer[array.length];
+        for(int i = 0; i < array.length; i++) {
+            A[i] = Integer.parseInt(array[i]);
+        }
+        final var result = permMissingElemService.apply(A);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/tape-equilibrium/array/{array}")
+    public ResponseEntity<Integer> tapeEquilibrium(@PathVariable String [] array) {
+        Integer [] A = new Integer[array.length];
+        for(int i = 0; i < array.length; i++) {
+            A[i] = Integer.parseInt(array[i]);
+        }
+        final var result = tapeEquilibriumService.apply(A);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
